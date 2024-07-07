@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,9 +32,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.example.dogs.data.Result
 import com.example.dogs.data.model.Breed
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun DogListScreen(
@@ -62,7 +64,19 @@ fun DogListScreen(
         }
 
         is Result.Success -> {
-            val breeds = (breedsResponse as Result.Success<List<Breed>>).data
+            val breeds = (breedsResponse as Result.Success<Flow<PagingData<Breed>>>).data.collectAsLazyPagingItems()
+            if (breeds.itemCount == 0) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics { contentDescription = "Dogs List" }
+                ) {
+                    CircularProgressIndicator(
+                        strokeWidth = 4.dp
+                    )
+                }
+            }
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -85,8 +99,17 @@ fun DogListScreen(
                         )
                     }
                 }
-                items(breeds) {
-                    DogCard(it.id, it.name, it.temperament, it.referenceImageId, onItemClick)
+                items(breeds.itemCount) { index ->
+                    val item = breeds[index]
+                    item?.let {
+                        DogCard(
+                            it.id,
+                            it.name,
+                            it.temperament,
+                            it.referenceImageId,
+                            onItemClick
+                        )
+                    }
                 }
             }
         }

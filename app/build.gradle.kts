@@ -103,6 +103,11 @@ dependencies {
     //coil
     implementation(libs.coil.compose)
 
+    //Paging3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+    testImplementation(libs.androidx.paging.common.ktx)
+
     // Testing dependencies
     testImplementation (libs.mockito.core)
     testImplementation (libs.mockk)

@@ -1,5 +1,7 @@
 package com.example.dogs.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.example.dogs.data.api.ApiService
 import com.example.dogs.data.model.Breed
 import com.example.dogs.data.model.Dog
@@ -13,9 +15,9 @@ class DogRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : DogRepository {
-    override suspend fun getDogs(): List<Breed> {
-        return withContext(ioDispatcher) {
-            apiService.getDogs()
+    override suspend fun getDogs(): Pager<Int, Breed> {
+        return Pager(PagingConfig(pageSize = 20)) {
+            DogsPagingSource(apiService)
         }
     }
 

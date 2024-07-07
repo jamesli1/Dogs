@@ -3,7 +3,9 @@ package com.example.dogs.domain
 import com.example.dogs.data.repository.DogRepository
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -14,6 +16,11 @@ class GetDogsUseCaseTest {
     @Before
     fun setUp() {
         subject = GetDogsUseCase(mockRepository)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test

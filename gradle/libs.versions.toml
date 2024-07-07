@@ -22,6 +22,7 @@ material3 = "1.2.1"
 mockitoCore = "4.8.0"
 mockk = "1.12.4"
 navigationTesting = "2.7.7"
+pagingRuntime = "3.3.0"
 retrofit = "2.9.0"
 tracing = "1.2.0"
 uiTestManifest = "1.6.8"
@@ -39,6 +40,9 @@ androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fr
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationTesting" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationTesting" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationTesting" }
+androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingRuntime" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 androidx-tracing = { module = "androidx.tracing:tracing", version.ref = "tracing" }
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "uiTestManifest" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "uiTestManifest" }

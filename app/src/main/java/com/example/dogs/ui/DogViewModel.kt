@@ -2,6 +2,8 @@ package com.example.dogs.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.dogs.data.Result
 import com.example.dogs.data.model.Breed
 import com.example.dogs.data.model.Dog
@@ -9,6 +11,7 @@ import com.example.dogs.domain.GetDogByIdUseCase
 import com.example.dogs.domain.GetDogImageByIdUseCase
 import com.example.dogs.domain.GetDogsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +24,8 @@ class DogViewModel @Inject constructor(
     private val getDogByIdUseCase: GetDogByIdUseCase,
     private val getDogImageByIdUseCase: GetDogImageByIdUseCase
 ) : ViewModel() {
-    private val _dogsListResponse = MutableStateFlow<Result<List<Breed>>>(Result.Loading)
-    val dogsListResponse: StateFlow<Result<List<Breed>>> = _dogsListResponse.asStateFlow()
+    private val _dogsListResponse = MutableStateFlow<Result<Flow<PagingData<Breed>>>>(Result.Loading)
+    val dogsListResponse: StateFlow<Result<Flow<PagingData<Breed>>>> = _dogsListResponse.asStateFlow()
 
     private val _dogDetailsResponse = MutableStateFlow<Result<Dog>>(Result.Loading)
     val dogDetailsResponse: StateFlow<Result<Dog>> = _dogDetailsResponse.asStateFlow()
@@ -31,7 +34,7 @@ class DogViewModel @Inject constructor(
         viewModelScope.launch {
             _dogsListResponse.value = Result.Loading
             try {
-                val response = getDogsUseCase()
+                val response = getDogsUseCase().flow.cachedIn(viewModelScope)
                 _dogsListResponse.value = Result.Success(response)
             } catch (e: Exception) {
                 _dogsListResponse.value = Result.Error(e.message)

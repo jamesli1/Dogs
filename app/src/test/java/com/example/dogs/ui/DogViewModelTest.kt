@@ -9,7 +9,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -31,6 +33,11 @@ class DogViewModelTest {
     fun setUp() {
         subject =
             DogViewModel(mockGetDogsUseCase, mockGetDogByIdUseCase, mockGetDogImageByIdUseCase)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
